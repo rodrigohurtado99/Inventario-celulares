@@ -1,0 +1,7 @@
+RewriteEngine On
+
+RewriteRule ^$ http://localhost/inventario_celulares/cadastro/login.php [R=301,L]
+
+# Desabilita a exibição de conteúdo dos diretórios
+Options -Indexes 
+
