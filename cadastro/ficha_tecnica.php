@@ -7,13 +7,12 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=7">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="../assets/estilo.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,300,0,0" />
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/bootstrap.min.css">
+ 
     <title>Informações do Aparelho</title>
 </head>
 <body>
@@ -30,7 +29,7 @@
             while($row = mysqli_fetch_array($result_query)){
         ?>
                 <div class="table-responsive table-bordered">
-                    <h2 class="bg-dark text-center text-light p-3 rounded mb-4">Informações do Aparelho</h2>
+                    <h2 class="text-center text-light mb-4 bg-dark">Informações do Aparelho</h2>
                     <table class="table table-striped table-hover text-light ">
                         <tbody>
                             <tr>
@@ -74,9 +73,12 @@
                                 <td><?php echo($row['situacao'])?></td>
                             </tr>
                             <tr>
+                                <th>Patrimônio</th>
+                                <td><?php echo($row['patrimonio'])?></td>
+                            </tr>
+                            <tr>
                                 <th>Criado em</th>
-                                <td><?php echo $row['data_atual'];?>
-                                </td>
+                                <td><?php $data_atual = new DateTime($row['data_atual']); echo $data_atual->format('d/m/Y'); ?></td>
                             </tr>
                         </tbody>
                     </table>

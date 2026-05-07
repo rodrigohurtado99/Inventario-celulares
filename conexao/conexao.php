@@ -2,7 +2,7 @@
     
     $user = "root";
     $password = "";
-    $database = "inventario-celulares";
+    $database = "inventario_celulares";
     $hostname = "localhost"; 
    
     // reporta erros se houver algum

@@ -1,80 +1,139 @@
-<?php
-    session_start();
-
-    include "../conexao/conexao.php";
-
-    if(isset($_SESSION['mensagem'])) { // verifica mensagem na sessão quando é feito a tentativa de entrar em uma página sem ter feito login
-
-        echo $_SESSION['mensagem']; 
-
-        unset($_SESSION['mensagem']); //remove a mensagem
-
-    }
-       
-       
-    
-    if($_SERVER['REQUEST_METHOD'] == "POST"){ // Garante que o PHP só execute quando o formulário for enviado
-        $usuario = htmlspecialchars($_POST['usuario'] ?? ''); // limpa o campo de espaço e protege contra xss e evita que que de erro ao digitar
-        $senha = htmlspecialchars($_POST['senha'] ?? ''); //  limpa o campo de espaço e protege contra xss e evita que que de erro ao digitar
-        
-        if(empty($usuario) && empty($senha)){// se os dois campos estiverem vazios emite erro
-        
-            echo "Informe usuário e senha....";
-
-        } elseif(empty($usuario)) {
-
-            echo "Informe o usuário..";
-
-        } 
-        
-    {
-            // busca usuário do banco
-            $stmt = $conexao->prepare("SELECT id, usuario, senha from users WHERE usuario = ?"); // prepara o mysql para executar
-            $stmt->bind_param('s', $usuario); // insere o valor de espera no prepare limpando antes de mandar pro banco de dados
-            $stmt->execute(); // executa o código passado 
-            $resultado = $stmt->get_result(); // guarda o resultado
-            
-            if($resultado->num_rows === 1) {
-                $row = $resultado->fetch_assoc();
-
-                // verifica senha
-                if(password_verify($senha, $row['senha'])) {
-
-                    // cria sessão
-                    $_SESSION['usuario_id'] = $row['id'];
-                    $_SESSION['usuario'] = $usuario;
-
-
-                    header("location: lista_celulares.php");
-                    exit;
-                } else {
-
-                    echo 'Usuário ou senha inválidos...';
-                }
-            } 
-        }
-     
-    }
-
-  
-?>
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-</head>
-<body>
-    <h1>Login</h1>
-    <div class="container">
-        <form method="POST">
-            <input type="text" name="usuario" autofocus><br><br>
-            <input type="password" name="senha"><br><br>
-            <input type="submit" value="Entrar">
-        </form>
-    </div>
-</body>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>Login</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+}
+
+/* Container principal */
+.login-container {
+    display: flex;
+    height: 100vh;
+}
+
+/* Lado esquerdo */
+.left-side {
+    flex: 1;
+    background: linear-gradient(135deg, #0ea5e9, #0284c7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.left-side img {
+    max-width: 70%;
+}
+
+/* Lado direito */
+.right-side {
+    flex: 1;
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Card */
+.login-box {
+    width: 100%;
+    max-width: 350px;
+}
+
+.form-control {
+    border-radius: 8px;
+}
+
+.btn-login {
+    background: #0ea5e9;
+    border: none;
+    border-radius: 8px;
+}
+
+.btn-login:hover {
+    background: #0284c7;
+}
+
+/* Mobile */
+@media(max-width: 768px){
+    .left-side {
+        display: none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="login-container">
+
+    <!-- LADO ESQUERDO -->
+    <div class="left-side">
+        <img src="https://cdn-icons-png.flaticon.com/512/5087/5087579.png">
+    </div>
+
+    <!-- LADO DIREITO -->
+    <div class="right-side">
+
+        <div class="login-box">
+
+            <h3 class="text-center mb-4">LOGIN</h3>
+
+            <!-- ERRO PHP -->
+            <?php if (!empty($erro)): ?>
+                <div class="alert alert-danger text-center">
+                    <?= $erro ?>
+                </div>
+            <?php endif; ?>
+
+            <form method="POST" action="../cadastro/valida_login.php">
+
+                <!-- Usuário -->
+                <div class="mb-3">
+                    <label>Usuário</label>
+                    <input type="text" name="usuario" class="form-control" placeholder="" required>
+                </div>
+
+                <!-- Senha -->
+                <div class="mb-2">
+                    <label>Senha</label>
+                    <input type="password" name="senha" class="form-control" placeholder="" required>
+                </div>
+
+                <!-- Lembrar + esqueceu -->
+                <div class="d-flex justify-content-between mb-3">
+                    <div>
+                        <input type="checkbox"> Lembrar
+                    </div>
+                    <a href="#" class="text-decoration-none">Esqueceu a senha?</a>
+                </div>
+
+                <!-- Botão -->
+                <div class="d-grid">
+                    <button class="btn btn-login text-white">Entrar</button>
+                </div>
+
+                <!-- Cadastro -->
+                <div class="text-center mt-3">
+                    <small>Não tem conta? <a href="#">Cadastrar</a></small>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
 </html>

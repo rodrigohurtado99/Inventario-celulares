@@ -21,12 +21,13 @@
         $conta = $conexao->real_escape_string($_POST['conta']);
         $num = $conexao->real_escape_string($_POST['tel']);
         $situacao = $conexao->real_escape_string($_POST['situacao']);
+        $patrimonio = $conexao->real_escape_string($_POST['patrimonio']);
         $data_atual = date("Y-m-d");
         
 
         // SQL para inserção no banco
-        $sql = "INSERT INTO `celulares` (`id`, `usuario`, `modelo`, `armazenamento`, `ram`, `centro-de-custo`, `imei`, `mac-address`, `tipo`, `conta`, `tel`, `situacao`, `data_atual`) 
-                VALUES ('$id', '$usuario', '$modelo', '$armazenamento', '$ram', '$centrodecusto', '$imei', '$mac', '$tipo', '$conta', '$num', '$situacao', '$data_atual')";
+        $sql = "INSERT INTO `celulares` (`id`, `usuario`, `modelo`, `armazenamento`, `ram`, `centro-de-custo`, `imei`, `mac-address`, `tipo`, `conta`, `tel`, `situacao`, `data_atual`, `patrimonio`) 
+                VALUES ('$id', '$usuario', '$modelo', '$armazenamento', '$ram', '$centrodecusto', '$imei', '$mac', '$tipo', '$conta', '$num', '$situacao', '$data_atual', '$patrimonio');";
 
         // Executa o SQL e verifica o sucesso
         if ($conexao->query($sql) === TRUE) {

@@ -1,8 +1,8 @@
 <?php
 
-include("../conexao/conexao.php");
+    include("../conexao/conexao.php");
 
-include("prot_login.php");
+    include("prot_login.php");
 
 ?>
 <!DOCTYPE html>
@@ -12,15 +12,11 @@ include("prot_login.php");
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/estilo.css">
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <link rel="stylesheet" href="../assets/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
-
+    
     <title>Manutenção de Celulares</title>
 
         <!-- AUTOCOMPLETE JS -->
@@ -45,9 +41,11 @@ include("prot_login.php");
         <!-- Dropdown para filtrar -->
         <div class="d-flex justify-content-between mb-4">
             <div class="dropdown">
+
                 <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Filtrar por
                 </button>
+
                 <ul class="dropdown-menu">
                     <li><a href="../cadastro/lista_celulares.php" class="dropdown-item">Inicio</a></li>
                     <li><a class="dropdown-item" href="?model=celular">Celulares</a></li>
@@ -56,10 +54,12 @@ include("prot_login.php");
                 </ul>
             </div>
 
+
         <!-- Cadastrar novo celular -->
             <a href="../cadastro/cadastra_novo.php" class="btn btn-success">Cadastrar aparelho</a>
             <a href="../cadastro/logout.php" class="btn btn-info">Sair</a>
         </div>
+        
 
         <main class="lista-container">
             <?php
@@ -80,12 +80,10 @@ include("prot_login.php");
             }
 
         // Exclusão de registro
-            if (isset($_GET['del'])) {
-                $btndelete = $conexao->real_escape_string($_GET['del']);
-                $query_delete = "UPDATE celulares SET deleted_at = NOW() WHERE id = '$btndelete'";
-                $atualiza_status = "UPDATE celulares SET situacao = 'Descartado' WHERE id = '$btndelete'";
+            if (isset($_POST['del'])) {
+                $btndelete = $conexao->real_escape_string($_POST['del']);
+                $query_delete = "UPDATE celulares SET deleted_at = NOW(), situacao = 'Descartado' WHERE id = '$btndelete'";
                 $conexao->query($query_delete);
-                $conexao->query($atualiza_status);
             }
 
             $result_query = $conexao->query($query);
@@ -118,9 +116,13 @@ include("prot_login.php");
                                         <span class='material-symbols-outlined'>visibility</span>
                                     </a>
                                     
-                                    <a href="../cadastro/lista_celulares.php?del=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Deseja mesmo excluir esse registro?')">
-                                        <span class='material-symbols-outlined'>delete</span>
-                                    </a>
+                                    <form action="../cadastro/lista_celulares.php" method="post" style="display: inline;">
+                                        <input type="hidden" name="del" value="<?php echo $row['id']; ?>" >
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Deseja mesmo excluir esse registro?')">
+                                            <span class='material-symbols-outlined'>delete</span>
+                                        </button>
+                                    </form>
+                                    
                                 </td>
                             </tr>
                         <?php endwhile; ?>
@@ -134,7 +136,6 @@ include("prot_login.php");
             </div>
         </main>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+           
 </body>
 </html>
